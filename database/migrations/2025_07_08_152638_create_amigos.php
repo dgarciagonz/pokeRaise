@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categorias', function (Blueprint $table) {
-            $table->id('id_categoria');
-            $table->string('nombre_categoria', 100)->unique();
+        Schema::create('amigos', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('id_usuario')->constrained('users', 'id_usuario')->onDelete('cascade');
+            $table->foreignId('id_amigo')->constrained('users', 'id_usuario')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tabla_categorias');
+        Schema::dropIfExists('amigos');
     }
 };

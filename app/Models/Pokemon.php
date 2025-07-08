@@ -8,9 +8,9 @@ class Pokemon extends Model
 {
     protected $primaryKey = 'id_pokemon';
     protected $fillable = [
-        'pokeapiInfo',
-        // nombre del pokemon, sprite, tipos, etc.
         'id_entrenador',
+        'pokeapi_url',
+        // nombre del pokemon, sprite, tipos, etc.
         'nivel',
         'experiencia',
         'hambre',
@@ -19,6 +19,7 @@ class Pokemon extends Model
         'activo',
         'apodo',
         'entrenador_original',
+         
     ];
 
     public function Entrenador()
