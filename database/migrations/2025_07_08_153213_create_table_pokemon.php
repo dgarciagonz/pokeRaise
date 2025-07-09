@@ -23,9 +23,11 @@ return new class extends Migration {
             $table->boolean('variocolor')->default(false);
             $table->boolean('activo')->default(true);
             $table->string('apodo', 50);
+            $table->string('lineaEvolutiva', 200)->nullable();
             $table->foreignId('entrenador_original')->nullable()
                 ->constrained('users', 'id_usuario')
                 ->onDelete('set null');
+                
             $table->timestamps();
         });
     }

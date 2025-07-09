@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Amigo extends Model
 {
-    public $incrementing = false;
+    protected $primaryKey = 'id';
 
     public function amigos()
     {

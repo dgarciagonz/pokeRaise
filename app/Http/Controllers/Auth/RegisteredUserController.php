@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Pokemon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -31,18 +32,43 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
         event(new Registered($user));
+
+        //Creamos un pokemon aleatorio para el nuevo usuario.
+
+        $numEvolucionPkm = rand(1, 477); //Cogemos la linea evolutiva del pokemon
+        $urlLineaEvolutiva= "https://pokeapi.co/api/v2/evolution-chain/".$numEvolucionPkm."";
+
+        //Llamada a la api
+        $response = file_get_contents($urlLineaEvolutiva);
+        $data = json_decode($response, true);
+
+        $nombrePokemon = $data['chain']['species']['name'];//Nombre del pokemon
+        $pokeapi_url = "https://pokeapi.co/api/v2/pokemon/".$nombrePokemon."/"; //URL del pokemon
+
+        $probshiny=rand(1,450);
+        $variocolor=$probshiny==1 ? true : false; //Probabilidad de que el pokemon sea variocolor (1 de 450)
+
+        $pokemon = Pokemon::create([
+        'id_entrenador' => $user->id_usuario,
+        'pokeapi_url'=>$pokeapi_url,
+        'variocolor'=>$variocolor,
+        'activo'=>true,
+        'apodo'=>$nombrePokemon,
+        'lineaEvolutiva'=>$urlLineaEvolutiva,
+        'entrenador_original'=>$user->id_usuario,
+        ]);
 
         Auth::login($user);
 

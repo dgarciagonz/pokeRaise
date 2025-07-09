@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pokemon extends Model
 {
+    protected $table = 'pokemons';
     protected $primaryKey = 'id_pokemon';
     protected $fillable = [
         'id_entrenador',
@@ -18,6 +19,7 @@ class Pokemon extends Model
         'variocolor',
         'activo',
         'apodo',
+        'lineaEvolutiva',
         'entrenador_original',
          
     ];
