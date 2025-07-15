@@ -63,7 +63,7 @@ class User extends Authenticatable
 
     public function pokemons()
     {
-        return $this->hasMany(Pokemon::class, 'entrenador_id');
+        return $this->hasMany(Pokemon::class, 'id_entrenador');
     }
 
     public function tareasAcabadas()

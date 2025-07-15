@@ -20,11 +20,21 @@ const form = useForm({
     remember: false,
 });
 
-const submit = () => {
-    form.post(route('login'), {
+const submit = async () => {
+    try {
+        await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+        credentials: 'include',
+        });
+
+        form.post(route('login'), {
+        preserveScroll: true,
         onFinish: () => form.reset('password'),
-    });
+        });
+    } catch (error) {
+        console.error('Error al obtener el CSRF token:', error);
+    }
 };
+
 </script>
 
 <template>

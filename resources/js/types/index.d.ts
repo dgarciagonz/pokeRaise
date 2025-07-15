@@ -35,4 +35,20 @@ export interface User {
     updated_at: string;
 }
 
+export interface Pokemon {
+    id: number;
+    id_entrenador:number;
+    nombre: string;
+    pokeapi_url: string;
+    nivel:number;
+    experiencia:number;
+    hambre:number;
+    felicidad:number;
+    variocolor:boolean;
+    activo:boolean;
+    apodo:string;
+    lineaEvolutiva:string;
+    entrenador_original:number;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;
