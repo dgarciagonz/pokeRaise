@@ -15,6 +15,7 @@ const felicidad = ref(0);
 const nivel = ref(0);
 const experiencia = ref(0);
 const hambre = ref(0);
+const cargandoImagen = ref(true);
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -27,13 +28,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 async function cargarPokemonActivo(): Promise<Pokemon | undefined> {
     try {
         const response = await fetch('/pokemons/activos', {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-    },
-});
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        });
 
         if (!response.ok) {
             const error = await response.json();
@@ -104,15 +105,22 @@ onMounted(() => {
 </script>
 
 <template>
+
     <Head title="Dashboard" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="grid auto-rows-min gap-4 md:grid-cols-3">
                 <div class="md:col-span-1">
-                    <img :src="sprite" alt="Sprite del Pokémon" class="w-32 h-32" />
+                    <!-- Imagen de carga (pokeball) -->
+                    <img v-if="cargandoImagen" src="/pokeball.png" alt="Cargando..."
+                        class=" w-32 h-32 object-contain animate-pulse" />
+
+                    <!-- Imagen del Pokémon -->
+                    <img v-show="!cargandoImagen" :src="sprite" @load="cargandoImagen = false" alt="Pokémon"
+                        class="w-32 h-32 object-contain transition-opacity duration-300" />
                 </div>
-               <div class="md:col-span-2">
+                <div class="md:col-span-2" v-show="!cargandoImagen">
                     <h1 class="text-2xl font-bold capitalize">{{ nombre }}</h1>
                     <p><strong>Apodo:</strong> {{ apodo }}</p>
                     <p><strong>Tipo:</strong> {{ tipo }}</p>
@@ -121,9 +129,10 @@ onMounted(() => {
                     <p><strong>Experiencia:</strong> {{ experiencia }}</p>
                     <p><strong>Hambre:</strong> {{ hambre }}%</p>
                 </div>
-                
+
             </div>
-            <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+            <div
+                class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                 <PlaceholderPattern />
                 Tareas
             </div>

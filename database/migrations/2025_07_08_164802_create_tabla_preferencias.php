@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tareas', function (Blueprint $table) {
-            $table->id('id_tarea');
-            $table->string('titulo', 100);
-            $table->string('descripcion')->nullable();
-            $table->integer('experiencia');
-            $table->integer('recompensa');
+        Schema::create('preferencias', function (Blueprint $table) {
+            $table->id('id_preferencia');
+            $table->foreignId(column: 'id_usuario')->constrained('users', 'id_usuario')->onDelete('cascade');
             $table->foreignId('id_categoria')->constrained('categorias', 'id_categoria')->onDelete('cascade');
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tareas');
+        Schema::dropIfExists('preferencias');
     }
 };
