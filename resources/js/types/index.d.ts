@@ -51,4 +51,10 @@ export interface Pokemon {
     entrenador_original:number;
 }
 
+export interface Categoria {
+    id: number;
+    nombre: string;
+    descripcion: string;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

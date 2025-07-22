@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tarea extends Model
 {
+            public $timestamps = false;
+
     protected $primaryKey = 'id_tarea';
 
     protected $fillable = [
-        'nombre',
-        'descripcion',
+        'titulo',
         'categoria',
         'experiencia',
         'recompensa',

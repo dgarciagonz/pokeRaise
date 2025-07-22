@@ -15,56 +15,52 @@ const form = useForm({
     password_confirmation: '',
 });
 
-const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
+const submit = async () => {
+    try {
+        await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+            credentials: 'include',
+        });
+        form.post(route('register'), {
+            onFinish: () => form.reset('password', 'password_confirmation'),
+        });
+    } catch (error) {
+        console.error('Error al obtener el CSRF token:', error);
+    }
 };
 </script>
 
 <template>
     <AuthBase title="Crear nueva cuenta" description="Introduce tus datos para crear una cuenta.">
+
         <Head title="Register" />
 
         <form @submit.prevent="submit" class="flex flex-col gap-6">
             <div class="grid gap-6">
                 <div class="grid gap-2">
                     <Label for="username">Username</Label>
-                    <Input id="username" type="text" required autofocus :tabindex="1" autocomplete="username" v-model="form.username" placeholder="Username" />
+                    <Input id="username" type="text" required autofocus :tabindex="1" autocomplete="username"
+                        v-model="form.username" placeholder="Username" />
                     <InputError :message="form.errors.username" />
                 </div>
 
                 <div class="grid gap-2">
                     <Label for="email">Email</Label>
-                    <Input id="email" type="email" required :tabindex="2" autocomplete="email" v-model="form.email" placeholder="email@example.com" />
+                    <Input id="email" type="email" required :tabindex="2" autocomplete="email" v-model="form.email"
+                        placeholder="email@example.com" />
                     <InputError :message="form.errors.email" />
                 </div>
 
                 <div class="grid gap-2">
                     <Label for="password">Password</Label>
-                    <Input
-                        id="password"
-                        type="password"
-                        required
-                        :tabindex="3"
-                        autocomplete="new-password"
-                        v-model="form.password"
-                        placeholder="Password"
-                    />
+                    <Input id="password" type="password" required :tabindex="3" autocomplete="new-password"
+                        v-model="form.password" placeholder="Password" />
                     <InputError :message="form.errors.password" />
                 </div>
 
                 <div class="grid gap-2">
                     <Label for="password_confirmation">Confirm password</Label>
-                    <Input
-                        id="password_confirmation"
-                        type="password"
-                        required
-                        :tabindex="4"
-                        autocomplete="new-password"
-                        v-model="form.password_confirmation"
-                        placeholder="Confirm password"
-                    />
+                    <Input id="password_confirmation" type="password" required :tabindex="4" autocomplete="new-password"
+                        v-model="form.password_confirmation" placeholder="Confirm password" />
                     <InputError :message="form.errors.password_confirmation" />
                 </div>
 

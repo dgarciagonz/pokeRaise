@@ -60,6 +60,7 @@ class RegisteredUserController extends Controller
         $probshiny=rand(1,450);
         $variocolor=$probshiny==1 ? true : false; //Probabilidad de que el pokemon sea variocolor (1 de 450)
 
+        //Creación del pokemon
         $pokemon = Pokemon::create([
         'id_entrenador' => $user->id_usuario,
         'pokeapi_url'=>$pokeapi_url,
@@ -72,6 +73,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return to_route('dashboard');
+        return to_route('preferencias');
     }
 }

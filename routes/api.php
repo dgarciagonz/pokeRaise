@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Controllers\Api\PokemonController;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CategoriaController;
+use App\Http\Controllers\Api\PreferenciaController;
+
 
 
 Route::get('/user', function (Request $request) {
@@ -14,5 +18,10 @@ Route::get('/usuarios', [UserController::class, 'index']); //Todos los usuarios
 Route::get('/usuarios/{id}', [UserController::class, 'show']); //Usuario por id
 
 Route::get('/pokemon/{id}',[PokemonController::class,'show']); //Pokemon por id
-Route::get('/pokemons/activos', [PokemonController::class, 'activo'])->middleware('auth:sanctum');
+//Route::get('/pokemons/activos', [PokemonController::class, 'activo'])->middleware('auth:sanctum'); //Pokemon activo del usuario actual
 
+Route::get('/categorias',[CategoriaController::class,'index']); //Todas las categorias
+Route::get('/categoria/{id}',[CategoriaController::class,'show']); //Categoria por id
+
+
+//Route::post('/preferencias', [\App\Http\Controllers\Api\PreferenciaController::class, 'store'])->middleware('auth:sanctum');

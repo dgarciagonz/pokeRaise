@@ -8,8 +8,13 @@ class Preferencia extends Model
 {
     
     protected $primaryKey = 'id_preferencia';
+        public $timestamps = false;
 
-    
+     protected $fillable = [
+        'id_usuario',
+        'id_categoria',
+        // agrega otros campos si los necesitas
+    ];
 
     public function prefiereCategoria()
     {
