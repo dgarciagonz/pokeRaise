@@ -13,7 +13,6 @@ class Preferencia extends Model
      protected $fillable = [
         'id_usuario',
         'id_categoria',
-        // agrega otros campos si los necesitas
     ];
 
     public function prefiereCategoria()

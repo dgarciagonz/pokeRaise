@@ -1,12 +1,5 @@
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+<script setup lang="ts">
 import { type Categoria } from '@/types';
-
-export function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-
-    
-}
 
 export async function cargarCategorias(): Promise<Categoria[] | undefined> {
     try {
@@ -33,3 +26,6 @@ export async function cargarCategorias(): Promise<Categoria[] | undefined> {
     }
 
 }
+</script>
+
+

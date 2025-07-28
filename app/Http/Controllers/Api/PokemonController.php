@@ -9,7 +9,7 @@ use App\Http\Resources\PokemonResource;
 
 class PokemonController extends Controller
 {
-    //buscar pokemon por id
+    //Buscar pokemon por id
     public function show($id)
     {
         $pkmn = Pokemon::findOrFail($id);
@@ -25,7 +25,10 @@ class PokemonController extends Controller
    public function activo()
 {
     $userId = auth()->id();
-    $pkmn = Pokemon::where('id_entrenador', $userId)->where('activo', true)->first();
+    $pkmn = Pokemon::
+    where('id_entrenador', $userId)
+    ->where('activo', true)
+    ->first();
 
     if (!$pkmn) {
         return response()->json(['mensaje' => 'No se encontró Pokémon activo en backend.'], 404);

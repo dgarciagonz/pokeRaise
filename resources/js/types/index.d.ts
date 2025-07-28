@@ -56,5 +56,10 @@ export interface Categoria {
     nombre: string;
     descripcion: string;
 }
+export interface Preferencia {
+    id: number;
+    user: number;
+    categoria: number;
+}
 
 export type BreadcrumbItemType = BreadcrumbItem;

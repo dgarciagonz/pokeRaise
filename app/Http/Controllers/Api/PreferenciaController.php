@@ -15,10 +15,16 @@ use Illuminate\Support\Facades\Auth;
 class PreferenciaController extends Controller
 {
     //buscar preferencias por id de usuario
-    public function show($idUser)
+    public function preferenciasUsuario()
     {
-        $preferenciasUser = Preferencia::where('id_usuario', $idUser);
-        return new PreferenciaResource($preferenciasUser);
+
+        $idUser = auth()->id();
+        if (!$idUser) {
+            return response()->json(['error' => 'Usuario no autenticado'], 401);
+        }
+
+        $preferenciasUser = Preferencia::where('id_usuario', $idUser)->get();
+        return PreferenciaResource::collection($preferenciasUser);
     }
 
     //mostrar todas las preferencias
@@ -35,18 +41,34 @@ class PreferenciaController extends Controller
     {
         $request->validate([
             'categorias' => 'required|array',
-            'categorias.id' => 'integer|exists:categorias,id_categoria',
-
+            'categorias.*' => 'integer|exists:categorias,id_categoria', 
         ]);
+
         $userId = Auth::id();
 
-        foreach ($request->categorias as $categoriaId) {
-            Preferencia::create([
-                'id_usuario' => $userId, 
-                'id_categoria' => $categoriaId
-                ]
-            );
+        //Preferencias actuales del usuario (array de id_categoria)
+        $preferenciasActuales = Preferencia::where('id_usuario', $userId)
+            ->pluck('id_categoria')
+            ->toArray();
+
+        $categoriasNuevas = $request->categorias; //array de ids enviados por el usuario
+
+        //Añadir nuevas preferencias que no existían
+        foreach ($categoriasNuevas as $categoriaId) {
+            if (!in_array($categoriaId, $preferenciasActuales)) {
+                Preferencia::create([
+                    'id_usuario' => $userId,
+                    'id_categoria' => $categoriaId,
+                ]);
+            }
         }
+
+        //Eliminar preferencias que ya no están en la lista enviada
+        Preferencia::where('id_usuario', $userId)
+            ->whereNotIn('id_categoria', $categoriasNuevas)
+            ->delete();
+
+        return response()->json(['message' => 'Preferencias actualizadas correctamente']);
     }
 
 
@@ -54,9 +76,18 @@ class PreferenciaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'categorias' => 'required|array',
+            'categorias.id' => 'integer|exists:categorias,id_categoria',
+
+        ]);
+        $userId = Auth::id();
+
+
+
+
     }
 
     /**
