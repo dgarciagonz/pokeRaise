@@ -19,6 +19,10 @@ Route::get('preferencias', function () {
     return Inertia::render('Preferencias');
 })->middleware(['auth', 'verified'])->name('preferencias');
 
+Route::get('tienda', function () {
+    return Inertia::render('Tienda');
+})->middleware(['auth', 'verified'])->name('tienda');
+
 
 Route::get('/pokemons/activos', [PokemonController::class, 'activo'])->middleware('auth');
 
@@ -26,7 +30,7 @@ Route::get('/preferenciasUser', [PreferenciaController::class, 'preferenciasUsua
 Route::post('/preferencias', [PreferenciaController::class, 'store'])->middleware('auth');
 Route::put('/cambiarPreferencias', [PreferenciaController::class, 'update'])->middleware('auth');
 
-Route::get('/diarias', [DiariaController::class, 'index'])->middleware(['auth']);
+//Route::get('/diarias', [DiariaController::class, 'index'])->middleware(['auth']);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

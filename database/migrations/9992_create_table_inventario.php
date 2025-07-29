@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('diarias', function (Blueprint $table) {
+        Schema::create('inventarios', function (Blueprint $table) {
             $table->id();
             $table->foreignId(column: 'id_usuario')->constrained('users', 'id_usuario')->onDelete('cascade');
-            $table->foreignId('id_tarea')->constrained('tareas', 'id_tarea')->onDelete('cascade');
-            $table->dateTime('fecha');
-            $table->boolean('completado')->default(false);
+            $table->foreignId('id_objeto')->constrained('tiendas', 'id')->onDelete('cascade');
+            $table->integer("cantidad")->default(1);
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('diarias');
+        Schema::dropIfExists('inventarios');
     }
 };

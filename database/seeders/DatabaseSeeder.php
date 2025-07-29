@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Tarea;
 use App\Models\User;
 use App\Models\Categoria;
+use App\Models\Tienda;
+
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -252,7 +254,43 @@ class DatabaseSeeder extends Seeder
                }
 
           }
+          
+          
 
+     }
+
+     public function Berries(){
+          
+          for ($i=1; $i <= 64 ; $i++) { 
+               $url_baya="https://pokeapi.co/api/v2/berry/".$i."/";
+               $infoBaya = file_get_contents($url_baya);
+
+               $data = json_decode($infoBaya, true);
+               $objetoBaya = $data['item']['url'];//Url del objeto baya
+
+               $infoObjetoBaya = file_get_contents($objetoBaya);
+               $dataObjeto = json_decode($infoObjetoBaya, true);
+               $sprite= $dataObjeto["sprites"]["default"];//Imagen de baya
+
+               //Obtener el nombre en español de la baya
+               $spanishName = null;
+               foreach ($dataObjeto["names"] as $entry) {
+                    if ($entry["language"]["name"] === "es") {
+                         $spanishName = $entry["name"];
+                         break;
+                    }
+               }
+               
+               //Creamos las bayas
+               $tienda = new Tienda;
+               $tienda->objeto = $spanishName;
+               $tienda->categoria= "Bayas";
+               $tienda->precio = rand(3,10);
+               $tienda->imagen = $sprite;
+               $tienda->save();
+          }
+
+          
      }
 
      public function run(): void
@@ -261,6 +299,8 @@ class DatabaseSeeder extends Seeder
           $this->command->info('Categorias creadas con éxito');
           self::Tareas();
           $this->command->info('Tareas creadas con éxito');
+          self::Berries();
+          $this->command->info('Berries creadas con éxito');
 
           // User::factory(10) >create();
 

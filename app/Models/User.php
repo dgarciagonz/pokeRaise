@@ -75,5 +75,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Tarea::class, 'id_usuario');
     }
-
+public function inventario()
+    {
+        return $this->hasMany(Inventario::class, 'id_usuario');
+    }
 }

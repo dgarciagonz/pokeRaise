@@ -62,4 +62,12 @@ export interface Preferencia {
     categoria: number;
 }
 
+export interface Objeto{
+    id:number;
+    objeto: string;
+    categoria: string;
+    precio:string;
+    imagen:string;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;
