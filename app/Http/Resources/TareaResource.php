@@ -5,22 +5,22 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DiariaResource extends JsonResource
+class TareaResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request)
+    public function toArray(Request $request): array
     {
-        
         return [
-            'id' => $this->id,
-            'id_usuario' => $this->id_usuario,
             'id_tarea' => $this->id_tarea,
-            'fecha' =>$this->fecha,
-            'completado' => $this->completado,
+            'titulo' => $this->titulo,
+            'categoria' => $this->id_categoria,
+            'experiencia' => $this->experiencia,
+            'recompensa'=>$this->recompensa,
+      
         ];
     }
 }

@@ -3,7 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Diaria;
+use App\Models\Tarea;
 class GenerarTareasDiarias extends Command
 {
 
@@ -50,8 +53,8 @@ class GenerarTareasDiarias extends Command
 
             foreach ($tareasAleatorias as $tarea) {
                 Diaria::create([
-                    'id_usuario' => $usuario->id,
-                    'id_tarea' => $tarea->id,
+                    'id_usuario' => $usuario->id_usuario,
+                    'id_tarea' => $tarea->id_tarea,
                     'fecha' => $hoy,
                     'completado' => false,
                 ]);

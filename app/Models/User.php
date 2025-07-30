@@ -71,6 +71,10 @@ class User extends Authenticatable
         return $this->hasMany(Tarea::class, 'id_usuario');
     }
 
+    public function preferencias()
+    {
+        return $this->hasMany(Preferencia::class, 'id_usuario');
+    }
     public function tareasPendientes()
     {
         return $this->hasMany(Tarea::class, 'id_usuario');

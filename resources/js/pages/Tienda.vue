@@ -88,7 +88,7 @@ onMounted(async () => {
                                         alt="Berry" class="w-16 h-16 object-contain transition-opacity duration-300" />
                                 </div>
 
-
+                                <p class="text-gray-600 dark:text-gray-400 text-left"> Recupera {{ objeto.precio*2 }} de hambre</p>
                                 <p class="text-gray-600 dark:text-gray-400 text-right">{{ objeto.precio }}$</p>
                             </label>
                         </div>
