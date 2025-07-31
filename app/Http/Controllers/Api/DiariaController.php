@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\DiariaResource;
@@ -14,11 +15,9 @@ class DiariaController extends Controller
     public function diarias()
     {
         $usuarioId = Auth::id();
-        $hoy = now()->toDateString();
 
         $tareasDiarias = Diaria::with('tarea')
             ->where('id_usuario', $usuarioId)
-            ->where('fecha', $hoy)
             ->get();
 
         return DiariaResource::collection($tareasDiarias);

@@ -28,7 +28,7 @@ class TareaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tarea $id)
+    public function show($id)
     {
          $tarea = Tarea::findOrFail($id);
 
@@ -38,6 +38,8 @@ class TareaController extends Controller
 
         return new TareaResource($tarea);
     }
+
+     
 
     /**
      * Update the specified resource in storage.

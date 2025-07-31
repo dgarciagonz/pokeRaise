@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\TareaResource;
+
 
 class DiariaResource extends JsonResource
 {
@@ -18,7 +20,7 @@ class DiariaResource extends JsonResource
         return [
             'id' => $this->id,
             'id_usuario' => $this->id_usuario,
-            'id_tarea' => $this->id_tarea,
+            'tarea'=> new TareaResource($this->tarea),
             'fecha' =>$this->fecha,
             'completado' => $this->completado,
         ];

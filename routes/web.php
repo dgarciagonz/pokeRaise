@@ -30,6 +30,9 @@ Route::get('/preferenciasUser', [PreferenciaController::class, 'preferenciasUsua
 Route::post('/preferencias', [PreferenciaController::class, 'store'])->middleware('auth');
 Route::put('/cambiarPreferencias', [PreferenciaController::class, 'update'])->middleware('auth');
 
+Route::get( '/diarias', [DiariaController::class,'diarias']);
+Route::patch( '/diaria/{id}', [DiariaController::class,'completar_Diarias']);
+
 //Route::get('/diarias', [DiariaController::class, 'index'])->middleware(['auth']);
 
 require __DIR__.'/settings.php';

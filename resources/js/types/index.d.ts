@@ -70,4 +70,31 @@ export interface Objeto{
     imagen:string;
 }
 
+export interface Diaria{
+    id:number;
+    id_usuario: number;
+    id_tarea: number;
+    fecha:string;
+    completado:boolean;
+}
+
+export interface Tarea{
+    id:number;
+    id_categoria: number;
+    titulo: string;
+    experiencia:number;
+    recompensa:number;
+}
+
+export interface DiariaConTarea {
+  id: number;
+  id_usuario: number;
+  id_tarea: number;
+  fecha: string;
+  completado: boolean;
+  tarea: Tarea;
+}
+
+
+
 export type BreadcrumbItemType = BreadcrumbItem;

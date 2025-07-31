@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { type Pokemon } from '@/types';
+import { type Pokemon, type Diaria, type Tarea, type DiariaConTarea } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 import PlaceholderPattern from '../components/PlaceholderPattern.vue';
+import axios from 'axios';
 
 const sprite = ref('');
 const nombre = ref('');
@@ -17,6 +18,8 @@ const experiencia = ref(0);
 const hambre = ref(0);
 const cargandoImagen = ref(true);
 
+const diarias = ref<DiariaConTarea[]>([]);
+const tares = ref<Tarea[]>([]);
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,6 +27,18 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/dashboard',
     },
 ];
+
+async function cargarDiarias(): Promise<DiariaConTarea[] | undefined> {
+    try {
+        const response = await axios.get('/diarias', { withCredentials: true });
+        return response.data.data as DiariaConTarea[] | undefined;
+    } catch (error) {
+        console.error('Error al cargar las diarias:', error);
+    }
+
+}
+
+
 
 async function cargarPokemonActivo(): Promise<Pokemon | undefined> {
     try {
@@ -74,6 +89,7 @@ async function pokeApi(url: string): Promise<any> {
 
 // Función principal que orquesta ambas llamadas
 async function cargarApi(): Promise<void> {
+
     const pokemonActivo = await cargarPokemonActivo();
     if (!pokemonActivo || !pokemonActivo.pokeapi_url) {
         console.warn('hola');
@@ -96,6 +112,14 @@ async function cargarApi(): Promise<void> {
     nivel.value = pokemonActivo.nivel;
     experiencia.value = pokemonActivo.experiencia;
     hambre.value = pokemonActivo.hambre;
+
+    const diariasData = await cargarDiarias();
+    if (!diariasData) {
+        console.warn('No se pudieron cargar las diarias');
+        return;
+    }
+
+    diarias.value = diariasData;
 }
 
 onMounted(() => {
@@ -134,7 +158,21 @@ onMounted(() => {
             <div
                 class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                 <PlaceholderPattern />
-                Tareas
+                <div class="w-full ">
+                    <div class="grid grid-cols-3 gap-4 m-3">
+
+                        <div v-for="d in diarias" :key="d.id" class="grid grid-cols-1">
+                            <label class="p-4 bg-white rounded-lg shadow dark:bg-[#1b1b18] border-2">
+                                <h3 class="text-lg font-semibold">{{ d.tarea.titulo }}</h3>
+                                <p>{{ d.tarea.experiencia }} exp</p>
+                                <p>{{ d.tarea.recompensa }} $</p>
+                                <p hidden>ID Diaria: {{ d.id }}</p>
+                            </label>
+                        </div>
+
+
+                    </div>
+                </div>
             </div>
         </div>
     </AppLayout>
