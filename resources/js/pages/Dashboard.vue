@@ -19,8 +19,7 @@ const hambre = ref(0);
 const cargandoImagen = ref(true);
 
 const diarias = ref<DiariaConTarea[]>([]);
-const tares = ref<Tarea[]>([]);
-
+const tareasCompletadas = ref<number[]>([]);
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
@@ -86,6 +85,34 @@ async function pokeApi(url: string): Promise<any> {
         console.error('Error al cargar datos de la PokéAPI:', error);
     }
 }
+
+//Funcion para completar las tareas diarias
+async function completarDiaria(idDiaria: number): Promise<void> {
+    try {
+        const response = await axios.patch(`/diaria/${idDiaria}`, {}, {
+            withCredentials: true
+        });
+
+        //Datos actualizados
+        const data = response.data;
+
+        experiencia.value = data.pokemon.experiencia;
+        felicidad.value = data.pokemon.felicidad;
+        hambre.value = data.pokemon.hambre;
+        nivel.value = data.pokemon.nivel;
+
+        //Dinero del usuario:
+        // dinero.value = data.usuario.dinero;
+
+        //Elimina la tarea completada del listado actual
+        tareasCompletadas.value.push(idDiaria);
+
+    } catch (error) {
+        console.error('Error al completar diaria:', error);
+    }
+}
+
+
 
 // Función principal que orquesta ambas llamadas
 async function cargarApi(): Promise<void> {
@@ -157,16 +184,34 @@ onMounted(() => {
             </div>
             <div
                 class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                <PlaceholderPattern />
+
                 <div class="w-full ">
                     <div class="grid grid-cols-3 gap-4 m-3">
 
-                        <div v-for="d in diarias" :key="d.id" class="grid grid-cols-1">
-                            <label class="p-4 bg-white rounded-lg shadow dark:bg-[#1b1b18] border-2">
-                                <h3 class="text-lg font-semibold">{{ d.tarea.titulo }}</h3>
-                                <p>{{ d.tarea.experiencia }} exp</p>
-                                <p>{{ d.tarea.recompensa }} $</p>
-                                <p hidden>ID Diaria: {{ d.id }}</p>
+                        <div v-for="d in diarias" :key="d.id" class="flex flex-col justify-between min-h-[150px]">
+
+                            <label :class="[
+                                'flex flex-col justify-between p-4 rounded-lg shadow border-2 transition h-full',
+                                tareasCompletadas.includes(d.id) || d.completado
+                                    ? 'bg-green-200 dark:bg-green-800 border-green-400'
+                                    : 'bg-white dark:bg-[#1b1b18] border-gray-200 dark:border-sidebar-border'
+                            ]">
+
+                                <h3 class="text-lg font-semibold text-center">{{ d.tarea.titulo }}</h3>
+                                <div class="flex items-center justify-center space-x-4 px-4">
+                                    <p>+{{ d.tarea.experiencia }} XP</p>
+                                    <p>+{{ d.tarea.recompensa }}$</p>
+                                </div>
+
+                                <div class="mt-6 flex justify-center align-items-baseline"
+                                    v-if="!tareasCompletadas.includes(d.id) || !d.completado">
+                                    <button @click="completarDiaria(d.id)"
+                                        :disabled="tareasCompletadas.includes(d.id) || d.completado"
+                                        class="mt-2 px-3 py-1 rounded transition text-white bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Completar
+                                    </button>
+                                </div>
+
                             </label>
                         </div>
 

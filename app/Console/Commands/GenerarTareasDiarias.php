@@ -34,7 +34,7 @@ class GenerarTareasDiarias extends Command
         $hoy = Carbon::now()->toDateString();
 
         //Eliminar tareas del día anterior
-        Diaria::where('fecha', $hoy)->delete();
+        Diaria::where('fecha', '!=', $hoy)->delete();
 
         //Obtener las preferencias de los usuarios
         $usuarios = User::with('preferencias')->get();

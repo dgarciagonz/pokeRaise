@@ -27,7 +27,7 @@ class DiariaController extends Controller
     {
         $userId = auth()->id();
 
-        $tareaDiaria = Diaria::findOrFail($id);
+        $tareaDiaria = Diaria::where('id',$id)->where('id_usuario',$userId)->first();
         $tareaDiaria->completado = true;
         $tareaDiaria->save();
 
@@ -78,9 +78,22 @@ class DiariaController extends Controller
         $pkmn->save();
 
         //Añade las monedas a la cuenta del usuario
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($userId );
         $user->monedas += $monedas;
         $user->save();
+
+        return response()->json([
+            'pokemon' => [
+                'nivel' => $pkmn->nivel,
+                'experiencia' => $pkmn->experiencia,
+                'felicidad' => $pkmn->felicidad,
+                'hambre' => $pkmn->hambre,
+                'pokeapi_url' => $pkmn->pokeapi_url,
+            ],
+            'usuario' => [
+                'monedas' => $user->monedas,
+            ],
+        ]);
 
     }
 }

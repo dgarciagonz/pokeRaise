@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Preferencia;
+use App\Models\Tarea;
+use App\Models\Diaria;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\PreferenciaResource;
 use Illuminate\Http\Request;
@@ -41,11 +44,11 @@ class PreferenciaController extends Controller
     {
         $request->validate([
             'categorias' => 'required|array',
-            'categorias.*' => 'integer|exists:categorias,id_categoria', 
+            'categorias.*' => 'integer|exists:categorias,id_categoria',
         ]);
 
         $userId = Auth::id();
-
+        $usuario = User::where('id_usuario', $userId)->first();
         //Preferencias actuales del usuario (array de id_categoria)
         $preferenciasActuales = Preferencia::where('id_usuario', $userId)
             ->pluck('id_categoria')
@@ -67,6 +70,28 @@ class PreferenciaController extends Controller
         Preferencia::where('id_usuario', $userId)
             ->whereNotIn('id_categoria', $categoriasNuevas)
             ->delete();
+
+        if (empty($preferenciasActuales)) {
+            $hoy = Carbon::now()->toDateString();
+
+            $categorias = $usuario->preferencias->pluck('id_categoria');
+
+            //Coge 6 tareas aleatorias de las preferencias del usuario
+            $tareasAleatorias = Tarea::whereIn('id_categoria', $categorias)
+                ->inRandomOrder()
+                ->limit(6)
+                ->get();
+
+
+            foreach ($tareasAleatorias as $tarea) {
+                Diaria::create([
+                    'id_usuario' => $usuario->id_usuario,
+                    'id_tarea' => $tarea->id_tarea,
+                    'fecha' => $hoy,
+                    'completado' => false,
+                ]);
+            }
+        }
 
         return response()->json(['message' => 'Preferencias actualizadas correctamente']);
     }
