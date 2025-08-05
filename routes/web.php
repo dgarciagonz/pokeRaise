@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Api\PokemonController;
@@ -23,6 +24,7 @@ Route::get('tienda', function () {
     return Inertia::render('Tienda');
 })->middleware(['auth', 'verified'])->name('tienda');
 
+Route::get('/usuarioActivo',[UserController::class,'activo'])->middleware('auth');
 
 Route::get('/pokemons/activos', [PokemonController::class, 'activo'])->middleware('auth');
 
@@ -33,7 +35,6 @@ Route::put('/cambiarPreferencias', [PreferenciaController::class, 'update'])->mi
 Route::get( '/diarias', [DiariaController::class,'diarias']);
 Route::patch('/diaria/{id}', [DiariaController::class, 'completar_Diarias']);
 
-//Route::get('/diarias', [DiariaController::class, 'index'])->middleware(['auth']);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

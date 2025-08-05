@@ -6,10 +6,21 @@ import { type User } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { ChevronsUpDown } from 'lucide-vue-next';
 import UserMenuContent from './UserMenuContent.vue';
+import { onMounted, ref } from 'vue';
 
 const page = usePage();
 const user = page.props.auth.user as User;
 const { isMobile, state } = useSidebar();
+const monedas = ref(user.monedas);
+
+onMounted(() => {
+  window.addEventListener('actualizar-monedas', (e: any) => {
+    monedas.value = e.detail;
+  });
+});
+
+
+
 </script>
 
 <template>
@@ -19,6 +30,7 @@ const { isMobile, state } = useSidebar();
                 <DropdownMenuTrigger as-child>
                     <SidebarMenuButton size="lg" class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                         <UserInfo :user="user" />
+                        <span class="ml-2 text-sm text-yellow-500"> {{ monedas }} $</span>
                         <ChevronsUpDown class="ml-auto size-4" />
                     </SidebarMenuButton>
                 </DropdownMenuTrigger>

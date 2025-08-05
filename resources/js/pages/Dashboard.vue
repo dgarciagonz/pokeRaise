@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
+import { User, type BreadcrumbItem } from '@/types';
 import { type Pokemon, type Diaria, type Tarea, type DiariaConTarea } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
@@ -8,15 +8,17 @@ import { ref } from 'vue';
 import PlaceholderPattern from '../components/PlaceholderPattern.vue';
 import axios from 'axios';
 
+
 const sprite = ref('');
 const nombre = ref('');
-const tipo = ref('');
+const tipo = ref<string[]>([]);
 const apodo = ref('');
 const felicidad = ref(0);
 const nivel = ref(0);
 const experiencia = ref(0);
 const hambre = ref(0);
 const cargandoImagen = ref(true);
+
 
 const diarias = ref<DiariaConTarea[]>([]);
 const tareasCompletadas = ref<number[]>([]);
@@ -36,7 +38,6 @@ async function cargarDiarias(): Promise<DiariaConTarea[] | undefined> {
     }
 
 }
-
 
 
 async function cargarPokemonActivo(): Promise<Pokemon | undefined> {
@@ -101,10 +102,21 @@ async function completarDiaria(idDiaria: number): Promise<void> {
         hambre.value = data.pokemon.hambre;
         nivel.value = data.pokemon.nivel;
 
-        //Dinero del usuario:
-        // dinero.value = data.usuario.dinero;
+        const infoPokemon = await pokeApi(data.pokemon.pokeapi_url);
 
-        //Elimina la tarea completada del listado actual
+        if (!infoPokemon || !infoPokemon.sprites) return;
+
+        sprite.value = data.pokemon.variocolor
+            ? infoPokemon.sprites.other.showdown.front_shiny
+            : infoPokemon.sprites.other.showdown.front_default;
+
+        nombre.value = infoPokemon.name;
+        tipo.value = infoPokemon.types.map((type: any) => type.type.name).join(', ');
+        //Dinero del usuario:
+        window.dispatchEvent(new CustomEvent('actualizar-monedas', {
+            detail: data.usuario.monedas
+        }));
+
         tareasCompletadas.value.push(idDiaria);
 
     } catch (error) {
@@ -132,8 +144,13 @@ async function cargarApi(): Promise<void> {
         : infoPokemon.sprites.other.showdown.front_default;
 
     nombre.value = infoPokemon.name;
-    tipo.value = infoPokemon.types.map((type: any) => type.type.name).join(', ');
 
+    for (const t of infoPokemon.types) {
+        const tipoInfo = await pokeApi(t.type.url);
+        if (tipoInfo) {
+            tipo.value.push(tipoInfo['sprites']['generation-viii']['sword-shield']['name_icon']);
+        }
+    }
     apodo.value = pokemonActivo.apodo;
     felicidad.value = pokemonActivo.felicidad;
     nivel.value = pokemonActivo.nivel;
@@ -162,7 +179,7 @@ onMounted(() => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div class="md:col-span-1">
+                <div class="mt-6 flex justify-center align-items-baseline">
                     <!-- Imagen de carga (pokeball) -->
                     <img v-if="cargandoImagen" src="/pokeball.png" alt="Cargando..."
                         class=" w-32 h-32 object-contain animate-pulse" />
@@ -171,10 +188,17 @@ onMounted(() => {
                     <img v-show="!cargandoImagen" :src="sprite" @load="cargandoImagen = false" alt="Pokémon"
                         class="w-32 h-32 object-contain transition-opacity duration-300" />
                 </div>
-                <div class="md:col-span-2" v-show="!cargandoImagen">
+                <div class="" v-show="!cargandoImagen">
                     <h1 class="text-2xl font-bold capitalize">{{ nombre }}</h1>
                     <p><strong>Apodo:</strong> {{ apodo }}</p>
-                    <p><strong>Tipo:</strong> {{ tipo }}</p>
+
+                    <div class="flex justify-around justify-start ">
+                        <div v-for="(sprite, index) in tipo" :key="index" class="d-flex ">
+                            <img v-show="!cargandoImagen" :src="sprite" @load="cargandoImagen = false"
+                                alt="tipo pokemon" class="w-25  object-contain " />
+                        </div>
+                    </div>
+
                     <p><strong>Nivel</strong> {{ nivel }}</p>
                     <p><strong>Felicidad:</strong> {{ felicidad }}%</p>
                     <p><strong>Experiencia:</strong> {{ experiencia }}</p>

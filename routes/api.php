@@ -21,7 +21,6 @@ Route::get('/usuarios', [UserController::class, 'index']); //Todos los usuarios
 Route::get('/usuarios/{id}', [UserController::class, 'show']); //Usuario por id
 
 Route::get('/pokemon/{id}',[PokemonController::class,'show']); //Pokemon por id
-//Route::get('/pokemons/activos', [PokemonController::class, 'activo'])->middleware('auth:sanctum'); //Pokemon activo del usuario actual
 
 Route::get('/categorias',[CategoriaController::class,'index']); //Todas las categorias
 Route::get('/categoria/{id}',[CategoriaController::class,'show']); //Categoria por id
@@ -31,4 +30,3 @@ Route::get('/objeto/{id}',[TiendaController::class,'show']); //ObjetoPorID
 
 Route::get('/tarea/{id}',[TareaController::class,'show']);//Obtener tarea por Id
 
-//Route::post('/preferencias', [\App\Http\Controllers\Api\PreferenciaController::class, 'store'])->middleware('auth:sanctum');
