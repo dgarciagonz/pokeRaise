@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { User, type BreadcrumbItem } from '@/types';
-import { type Pokemon, type Diaria, type Tarea, type DiariaConTarea } from '@/types';
+import { type BreadcrumbItem } from '@/types';
+import { type Pokemon, type DiariaConTarea } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
-import PlaceholderPattern from '../components/PlaceholderPattern.vue';
 import axios from 'axios';
 
 

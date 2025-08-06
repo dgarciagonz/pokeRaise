@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head} from '@inertiajs/vue3';
 import { Preferencia, type Categoria } from '@/types';
 import { computed, onMounted } from 'vue';
 import { ref } from 'vue';

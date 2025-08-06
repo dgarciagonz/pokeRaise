@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts">
 import { type Categoria } from '@/types';
 
 export async function cargarCategorias(): Promise<Categoria[] | undefined> {

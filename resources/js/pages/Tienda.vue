@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import { type Objeto,type BreadcrumbItem } from '@/types';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
@@ -10,7 +10,7 @@ import axios from 'axios';
 const cargandoImagen = ref(true);
 const cargando = ref(false);
 const currentPage = ref(1);
-let Objetos = ref<Objeto[]>([]);
+const Objetos = ref<Objeto[]>([]);
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
