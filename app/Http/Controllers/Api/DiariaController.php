@@ -75,6 +75,7 @@ class DiariaController extends Controller
             $pkmn->experiencia = $experienciaActual;
         }
 
+        $pkmn->felicidad+=($experienciaPkm/2);
         $pkmn->save();
 
         //Añade las monedas a la cuenta del usuario

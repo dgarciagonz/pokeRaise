@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('pokeapi_url', 200);
             $table->integer('nivel')->default(1);
             $table->integer('experiencia')->default(0);
-            $table->integer('hambre')->default(100);
+            $table->integer('hambre')->default(0);
             $table->integer('felicidad')->default(0);
             $table->boolean('variocolor')->default(false);
             $table->boolean('activo')->default(true);

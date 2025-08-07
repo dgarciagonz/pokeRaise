@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import { type Objeto,type BreadcrumbItem } from '@/types';
+import { type Objeto, type BreadcrumbItem } from '@/types';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 
@@ -87,8 +87,12 @@ onMounted(async () => {
                                     <img v-show="!cargandoImagen" :src="objeto.imagen" @load="cargandoImagen = false"
                                         alt="Berry" class="w-16 h-16 object-contain transition-opacity duration-300" />
                                 </div>
-
-                                <p class="text-gray-600 dark:text-gray-400 text-left"> Recupera {{ objeto.precio*2 }} de hambre</p>
+                                <div>
+                                    <p v-if="objeto.id == 63" class="text-gray-600 dark:text-gray-400 text-left">
+                                        Cambia el color de tu pokemon</p>
+                                    <p v-else class="text-gray-600 dark:text-gray-400 text-left"> Recupera {{
+                                        objeto.precio*2 }} de hambre</p>
+                                </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-right">{{ objeto.precio }}$</p>
                             </label>
                         </div>

@@ -17,13 +17,14 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-        protected $primaryKey = 'id_usuario';
+    protected $table = 'users';
+    protected $primaryKey = 'id_usuario';
 
     protected $fillable = [
         'username',
         'email',
         'password',
-        'rol', 
+        'rol',
         'monedas',
     ];
 
@@ -57,7 +58,7 @@ class User extends Authenticatable
 
     public function amigosDe()
     {
-        return $this->hasMany(Amigo::class,  'id_amigo');
+        return $this->hasMany(Amigo::class, 'id_amigo');
     }
 
 
@@ -79,7 +80,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Tarea::class, 'id_usuario');
     }
-public function inventario()
+    public function inventario()
     {
         return $this->hasMany(Inventario::class, 'id_usuario');
     }

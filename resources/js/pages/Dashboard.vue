@@ -10,7 +10,7 @@ import axios from 'axios';
 
 const sprite = ref('');
 const nombre = ref('');
-const tipo = ref<string[]>([]);
+let tipo = ref<string[]>([]);
 const apodo = ref('');
 const felicidad = ref(0);
 const nivel = ref(0);
@@ -110,7 +110,14 @@ async function completarDiaria(idDiaria: number): Promise<void> {
             : infoPokemon.sprites.other.showdown.front_default;
 
         nombre.value = infoPokemon.name;
-        tipo.value = infoPokemon.types.map((type: any) => type.type.name).join(', ');
+
+        tipo.value = [];
+        for (const t of infoPokemon.types) {
+            const tipoInfo = await pokeApi(t.type.url);
+            if (tipoInfo) {
+                tipo.value.push(tipoInfo['sprites']['generation-viii']['sword-shield']['name_icon']);
+            }
+        }
         //Dinero del usuario:
         window.dispatchEvent(new CustomEvent('actualizar-monedas', {
             detail: data.usuario.monedas
@@ -199,9 +206,22 @@ onMounted(() => {
                     </div>
 
                     <p><strong>Nivel</strong> {{ nivel }}</p>
-                    <p><strong>Felicidad:</strong> {{ felicidad }}%</p>
-                    <p><strong>Experiencia:</strong> {{ experiencia }}</p>
-                    <p><strong>Hambre:</strong> {{ hambre }}%</p>
+                    <div class="flex space-x-1 mt-1">
+                        <span v-for="n in 5" :key="n">
+                            {{ n <= Math.floor(felicidad / 20) ? '❤️' : '🖤' }} </span>
+                    </div>
+                    <p><strong>Experiencia:</strong></p>
+                    <div
+                        style="width: 100%; background-color: #e5e7eb; border-radius: 8px; overflow: hidden; height: 20px;">
+                        <div :style="{ width: experiencia + '%', backgroundColor: '#3b82f6', height: '100%' }"></div>
+                    </div>
+
+                    <!-- Hambre -->
+                    <p><strong>Hambre:</strong></p>
+                    <div
+                        style="width: 100%; background-color: #e5e7eb; border-radius: 8px; overflow: hidden; height: 20px;">
+                        <div :style="{ width: hambre + '%', backgroundColor: '#facc15', height: '100%' }"></div>
+                    </div>
                 </div>
 
             </div>

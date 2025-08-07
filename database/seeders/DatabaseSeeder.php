@@ -283,9 +283,9 @@ class DatabaseSeeder extends Seeder
                
                //Creamos las bayas
                $tienda = new Tienda;
-               $tienda->objeto = $spanishName;
+               $i==63?$tienda->objeto = "Baya Dorada":$tienda->objeto = $spanishName;
                $tienda->categoria= "Bayas";
-               $tienda->precio = rand(3,10);
+               $i==63?$tienda->precio=100000:$tienda->precio= rand(3,10);
                $tienda->imagen = $sprite;
                $tienda->save();
           }
