@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { type Pokemon, type DiariaConTarea } from '@/types';
+import { type Pokemon, type Diaria } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
@@ -19,7 +19,7 @@ const hambre = ref(0);
 const cargandoImagen = ref(true);
 
 
-const diarias = ref<DiariaConTarea[]>([]);
+const diarias = ref<Diaria[]>([]);
 const tareasCompletadas = ref<number[]>([]);
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,10 +28,10 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-async function cargarDiarias(): Promise<DiariaConTarea[] | undefined> {
+async function cargarDiarias(): Promise<Diaria[] | undefined> {
     try {
         const response = await axios.get('/diarias', { withCredentials: true });
-        return response.data.data as DiariaConTarea[] | undefined;
+        return response.data.data as Diaria[] | undefined;
     } catch (error) {
         console.error('Error al cargar las diarias:', error);
     }
@@ -241,6 +241,7 @@ onMounted(() => {
                             ]">
 
                                 <h3 class="text-lg font-semibold text-center">{{ d.tarea.titulo }}</h3>
+                                <p class="text-sm font-semibold text-green-600 dark:text-green-400 text-center">{{ d.tarea.categoria.nombre }}</p>
                                 <div class="flex items-center justify-center space-x-4 px-4">
                                     <p>+{{ d.tarea.experiencia }} XP</p>
                                     <p>+{{ d.tarea.recompensa }}$</p>

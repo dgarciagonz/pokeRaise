@@ -67,15 +67,8 @@ export interface Objeto{
     objeto: string;
     categoria: string;
     precio:number;
+    descipcion:string;
     imagen:string;
-}
-
-export interface Diaria{
-    id:number;
-    id_usuario: number;
-    id_tarea: number;
-    fecha:string;
-    completado:boolean;
 }
 
 export interface Tarea{
@@ -84,9 +77,10 @@ export interface Tarea{
     titulo: string;
     experiencia:number;
     recompensa:number;
+    categoria: Categoria;
 }
 
-export interface DiariaConTarea {
+export interface Diaria {
   id: number;
   id_usuario: number;
   id_tarea: number;

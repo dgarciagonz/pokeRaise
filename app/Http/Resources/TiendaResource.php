@@ -19,6 +19,7 @@ class TiendaResource extends JsonResource
             'objeto' => $this->objeto,
             'categoria' => $this->categoria,
             'precio' => $this->precio,
+            'descripcion' => $this->descripcion,
             'imagen' => $this->imagen
        
         ];

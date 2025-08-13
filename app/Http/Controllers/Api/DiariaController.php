@@ -3,85 +3,43 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\DiariaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\DiariaResource;
 use App\Models\Diaria;
-use App\Models\User;
 use App\Models\Pokemon;
 
 class DiariaController extends Controller
 {
+
+    protected DiariaService $diariaService;
+
+    public function __construct(DiariaService $diariaService)
+    {
+        $this->diariaService = $diariaService;
+    }
     public function diarias()
     {
         $usuarioId = Auth::id();
 
-        $tareasDiarias = Diaria::with('tarea')
+        $tareasDiarias = Diaria::with('tarea.categoria')
             ->where('id_usuario', $usuarioId)
             ->get();
 
         return DiariaResource::collection($tareasDiarias);
     }
 
-    public function completar_Diarias($id)
+    public function completar_Diarias(Request $request,$id)
     {
-        $userId = auth()->id();
-
-        $tareaDiaria = Diaria::where('id',$id)->where('id_usuario',$userId)->first();
-        $tareaDiaria->completado = true;
-        $tareaDiaria->save();
-
-        $experienciaPkm = $tareaDiaria->tarea->experiencia;
-        $monedas = $tareaDiaria->tarea->recompensa;
-
-
+        $user = $request->user();
+        $diaria = Diaria::where('id', $id)->where('id_usuario', $user->id_usuario)->first();
         $pkmn = Pokemon::
-            where('id_entrenador', $userId)
+            where('id_entrenador', $user->id_usuario)
             ->where('activo', true)
             ->first();
 
-        $experienciaActual = $pkmn->experiencia + $experienciaPkm;
-        if ($experienciaActual >= 100) {
-            //Si tiene 100 o mas de experiencia sube de nivel
-            $pkmn->nivel += 1;
-            $pkmn->experiencia = $experienciaActual - 100;
-
-            //Comprobamos si cumple los requisitos de evolución
-            $response = file_get_contents($pkmn->lineaEvolutiva);
-            $data = json_decode($response, true);
-
-            $evolucion1 = $data['chain']['evolves_to'][0] ?? null;
-            $evolucion2 = $evolucion1['evolves_to'][0] ?? null;
-
-            //Verificamos si hay evolución 1 y el nivel mínimo
-            if (
-                $evolucion1 &&
-                isset($evolucion1['evolution_details'][0]['min_level']) &&
-                $pkmn->nivel >= $evolucion1['evolution_details'][0]['min_level']
-            ) {
-                $pkmn->pokeapi_url = "https://pokeapi.co/api/v2/pokemon/" . $evolucion1['species']['name'] . "/";
-
-                //Verificamos si hay evolución 2 y el nivel mínimo
-                if (
-                    $evolucion2 &&
-                    isset($evolucion2['evolution_details'][0]['min_level']) &&
-                    $pkmn->nivel >= $evolucion2['evolution_details'][0]['min_level']
-                ) {
-                    $pkmn->pokeapi_url = "https://pokeapi.co/api/v2/pokemon/" . $evolucion2['species']['name'] . "/";
-                }
-            }
-
-        } else {
-            $pkmn->experiencia = $experienciaActual;
-        }
-
-        $pkmn->felicidad+=($experienciaPkm/2);
-        $pkmn->save();
-
-        //Añade las monedas a la cuenta del usuario
-        $user = User::findOrFail($userId );
-        $user->monedas += $monedas;
-        $user->save();
+        $this->diariaService->completar($diaria, $pkmn, $user);
 
         return response()->json([
             'pokemon' => [
@@ -90,6 +48,7 @@ class DiariaController extends Controller
                 'felicidad' => $pkmn->felicidad,
                 'hambre' => $pkmn->hambre,
                 'pokeapi_url' => $pkmn->pokeapi_url,
+                'variocolor' => $pkmn->variocolor,
             ],
             'usuario' => [
                 'monedas' => $user->monedas,

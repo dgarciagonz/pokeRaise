@@ -12,7 +12,7 @@ class CategoriaResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray($request): array
+    public function toArray( $request): array
     {
         return [
             'id' => $this->id_categoria,

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('titulo', 200);
             $table->integer('experiencia');
             $table->integer('recompensa');
-            $table->foreignId('id_categoria')->constrained('categorias', 'id_categoria')->onDelete('cascade');
+            $table->foreignId('categoria')->constrained('categorias', 'id_categoria')->onDelete('cascade');
         });
     }
 

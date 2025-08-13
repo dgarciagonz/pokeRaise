@@ -12,13 +12,20 @@ class Tarea extends Model
 
     protected $fillable = [
         'titulo',
-        'categoria',
+        'id_categoria',
         'experiencia',
         'recompensa',
     ];
 
-    public function categoriaTarea()
-{
-    return $this->belongsTo(Categoria::class, 'id_categoria');
-}
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class, 'id_categoria');
+    }
+
+    public function diarias()
+    {
+        return $this->hasMany(Diaria::class, 'id_tarea');
+    }
+
+
 }

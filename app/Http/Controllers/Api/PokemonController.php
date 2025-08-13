@@ -22,19 +22,19 @@ class PokemonController extends Controller
     }
 
 
-   public function activo()
-{
-    $userId = auth()->id();
-    $pkmn = Pokemon::
-    where('id_entrenador', $userId)
-    ->where('activo', true)
-    ->first();
+    public function activo()
+    {
+        $userId = auth()->id();
+        $pkmn = Pokemon::
+            where('id_entrenador', $userId)
+            ->where('activo', true)
+            ->first();
 
-    if (!$pkmn) {
-        return response()->json(['mensaje' => 'No se encontró Pokémon activo en backend.'], 404);
+        if (!$pkmn) {
+            return response()->json(['mensaje' => 'No se encontró Pokémon activo en backend.'], 404);
+        }
+
+        return new PokemonResource($pkmn);
     }
-
-    return new PokemonResource($pkmn);
-}
 
 }

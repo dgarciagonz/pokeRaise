@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('objeto');
             $table->string('categoria');
             $table->string('imagen');
+            $table->string("descripcion");
             $table->integer("precio");
         });
     }

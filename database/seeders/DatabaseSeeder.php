@@ -247,8 +247,8 @@ class DatabaseSeeder extends Seeder
                for ($j = 0; $j < count($tareaSocial); $j++) {
                     $tarea = new Tarea;
                     $tarea->titulo = $nombreTarea[$j];
-                    $tarea->id_categoria= $i+1;
-                    $tarea->experiencia = rand(5, 25);
+                    $tarea->categoria= $i+1;
+                    $tarea->experiencia = rand(5, 20);
                     $tarea->recompensa = rand(1, 3);
                     $tarea->save();
                }
@@ -282,11 +282,14 @@ class DatabaseSeeder extends Seeder
                }
                
                //Creamos las bayas
+               $precio=rand(3,20);
+
                $tienda = new Tienda;
                $i==63?$tienda->objeto = "Baya Dorada":$tienda->objeto = $spanishName;
                $tienda->categoria= "Bayas";
-               $i==63?$tienda->precio=100000:$tienda->precio= rand(3,10);
+               $i==63?$tienda->precio=100000:$tienda->precio= $precio;
                $tienda->imagen = $sprite;
+               $i==63?$tienda->descripcion="Vuelve a tu pokemon variocolor":$tienda->descripcion = "Sacia ".round($precio*1.5)." de hambre";
                $tienda->save();
           }
 

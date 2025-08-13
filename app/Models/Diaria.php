@@ -18,13 +18,13 @@ class Diaria extends Model
     ];
 
 
-    // Relación con usuario
+    //Relación con usuario
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_usuario');
     }
 
-    // Relación con tarea
+    //Relación con tarea
     public function tarea()
     {
         return $this->belongsTo(Tarea::class, 'id_tarea');

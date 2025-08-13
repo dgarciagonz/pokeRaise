@@ -14,6 +14,7 @@ class Tienda extends Model
         'objeto',
         'categoria',
         'precio',
+        'descripcion',
         'imagen',
     ];
 

@@ -15,8 +15,8 @@ class Categoria extends Model
     ];
 
 
-    public function tareasConCategoria()
+    public function tareas()
 {
-    return $this->hasMany(Tarea::class, 'categoria');
+    return $this->hasMany(Tarea::class, 'id_categoria');
 }
 }

@@ -72,11 +72,11 @@ onMounted(async () => {
         <div
             class="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
             <h1 class="text-2xl font-bold mb-6">Bayas</h1>
-            <div class="w-full max-w-2xl">
+            <div class="w-full ">
 
                 <form>
-                    <div class="grid grid-cols-5 gap-4">
-                        <div v-for="objeto in Objetos" :key="objeto.id" class="grid grid-cols-1">
+                    <div class="grid grid-cols-4 gap-4 m-3">
+                        <div v-for="objeto in Objetos" :key="objeto.id" class="flex flex-col justify-between min-h-[150px]">
                             <label
                                 class="p-4 bg-white rounded-lg shadow dark:bg-[#1b1b18] border-2 transition-all duration-200 cursor-pointer">
                                 <h3 class="text-xl font-semibold text-center">{{ objeto.objeto }}</h3>
@@ -90,8 +90,8 @@ onMounted(async () => {
                                 <div>
                                     <p v-if="objeto.id == 63" class="text-gray-600 dark:text-gray-400 text-left">
                                         Cambia el color de tu pokemon</p>
-                                    <p v-else class="text-gray-600 dark:text-gray-400 text-left"> Recupera {{
-                                        objeto.precio*2 }} de hambre</p>
+                                    <p v-else class="text-gray-600 dark:text-gray-400 text-center"> {{
+                                        objeto.descripcion }}</p>
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 text-right">{{ objeto.precio }}$</p>
                             </label>

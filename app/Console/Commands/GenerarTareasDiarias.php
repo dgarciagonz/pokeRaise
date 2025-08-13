@@ -7,10 +7,12 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Diaria;
 use App\Models\Tarea;
+use App\Services\TareaService;
+
 class GenerarTareasDiarias extends Command
 {
 
-
+    
     /**
      * The name and signature of the console command.
      *
@@ -28,8 +30,11 @@ class GenerarTareasDiarias extends Command
     /**
      * Execute the console command.
      */
+    
     public function handle()
     {
+        $tareaService = app(TareaService::class);
+
         //Obtener fecha de hoy
         $hoy = Carbon::now()->toDateString();
 
@@ -41,28 +46,11 @@ class GenerarTareasDiarias extends Command
 
         foreach ($usuarios as $usuario) {
             //Buscar la categoria de las preferencias de los usuarios
-            $categorias = $usuario->preferencias->pluck('id_categoria');
-
-
-            //Coge 6 tareas aleatorias de las preferencias del usuario
-            $tareasAleatorias = Tarea::whereIn('id_categoria', $categorias)
-                                      ->inRandomOrder()
-                                      ->limit(6)
-                                      ->get();
-
-
-            foreach ($tareasAleatorias as $tarea) {
-                Diaria::create([
-                    'id_usuario' => $usuario->id_usuario,
-                    'id_tarea' => $tarea->id_tarea,
-                    'fecha' => $hoy,
-                    'completado' => false,
-                ]);
-            }
+            $tareaService->asignarTareas($usuario);
         }
 
         $this->info('Tareas diarias generadas correctamente.');
     }
 
-    
+
 }

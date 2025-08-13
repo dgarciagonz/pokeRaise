@@ -17,10 +17,13 @@ class TareaResource extends JsonResource
         return [
             'id_tarea' => $this->id_tarea,
             'titulo' => $this->titulo,
-            'categoria' => $this->id_categoria,
+            'categoria' => $this->categoria
+                ? new CategoriaResource($this->categoria)
+                : null,
+            
             'experiencia' => $this->experiencia,
-            'recompensa'=>$this->recompensa,
-      
+            'recompensa' => $this->recompensa,
+
         ];
     }
 }
