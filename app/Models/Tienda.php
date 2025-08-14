@@ -18,7 +18,7 @@ class Tienda extends Model
         'imagen',
     ];
 
-    public function InventarioUsuario()
+    public function inventario()
 {
     return $this->hasMany(Inventario::class, 'id_objeto');
 }

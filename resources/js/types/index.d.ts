@@ -67,7 +67,7 @@ export interface Objeto{
     objeto: string;
     categoria: string;
     precio:number;
-    descipcion:string;
+    descripcion:string;
     imagen:string;
 }
 

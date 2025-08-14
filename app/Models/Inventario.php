@@ -17,11 +17,11 @@ class Inventario extends Model
        
     ];
 
-    public function ObjetoTienda()
+    public function objeto()
 {
     return $this->belongsToMany(Tienda::class, 'id');
 }
-public function InventarioUsuario()
+public function usuario()
     {
         return $this->belongsToMany(Inventario::class, 'id_usuario');
     }

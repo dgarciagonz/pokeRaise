@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Api\PokemonController;
 use App\Http\Controllers\Api\PreferenciaController;
 use App\Http\Controllers\Api\DiariaController;
+use App\Http\Controllers\Api\TiendaController;
 
 
 Route::get('/', function () {
@@ -32,8 +33,10 @@ Route::get('/preferenciasUser', [PreferenciaController::class, 'preferenciasUsua
 Route::post('/preferencias', [PreferenciaController::class, 'store'])->middleware('auth');
 Route::put('/cambiarPreferencias', [PreferenciaController::class, 'update'])->middleware('auth');
 
-Route::get( '/diarias', [DiariaController::class,'diarias']);
-Route::patch('/diaria/{id}', [DiariaController::class, 'completar_Diarias']);
+Route::get( '/diarias', [DiariaController::class,'diarias'])->middleware('auth');
+Route::patch('/diaria/{id}', [DiariaController::class, 'completar_Diarias'])->middleware('auth');
+
+Route::patch('/comprar/{id}', [TiendaController::class, 'comprar'])->middleware('auth');
 
 
 require __DIR__.'/settings.php';

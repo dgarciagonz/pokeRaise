@@ -247,7 +247,7 @@ class DatabaseSeeder extends Seeder
                for ($j = 0; $j < count($tareaSocial); $j++) {
                     $tarea = new Tarea;
                     $tarea->titulo = $nombreTarea[$j];
-                    $tarea->categoria= $i+1;
+                    $tarea->id_categoria= $i+1;
                     $tarea->experiencia = rand(5, 20);
                     $tarea->recompensa = rand(1, 3);
                     $tarea->save();

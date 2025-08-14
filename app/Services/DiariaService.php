@@ -31,9 +31,7 @@ class DiariaService
         $this->pokemonService->levelUp($pkmn, $experienciaPkm);
         $this->userService->incrementar($usuario,$monedas);
 
-        //Añade las monedas a la cuenta del usuario
-        $usuario->monedas += $monedas;
-        $usuario->save();
+       
     }
 
     public function crearDiarias(Collection $tareas, User $usuario){

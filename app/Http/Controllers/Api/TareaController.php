@@ -14,7 +14,8 @@ class TareaController extends Controller
      */
     public function index()
     {
-        //
+        $indexTareas = Tarea::paginate(15);
+        return TareaResource::collection($indexTareas);
     }
 
     /**

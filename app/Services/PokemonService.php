@@ -43,7 +43,7 @@ public function levelUp(Pokemon $pkmn, int $experienciaPkm):void{
             $pkmn->experiencia = $experienciaActual;
         }
 
-        $pkmn->felicidad += ($experienciaPkm / 2);
+        $pkmn->felicidad += ($experienciaPkm / 10);
         $pkmn->save();
 }
 
